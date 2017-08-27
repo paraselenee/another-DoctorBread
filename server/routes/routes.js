@@ -1,9 +1,7 @@
 const express = require('express')
-const UserController = require('../controller/user.js')
-const GroupController = require('../controller/group.js')
+const bakeryController = require('../controller/bakery.js')
 const router = express.Router()
 
-UserController(router)
-GroupController(router)
+bakeryController(router)
 
 module.exports = router

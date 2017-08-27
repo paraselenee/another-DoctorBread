@@ -21,42 +21,42 @@ instance.interceptors.request.use(config => {
 	return Promise.reject(err)
 })
 // axios拦截响应
-instance.interceptors.response.use(response => {
-	return response
-}, err => {
-	if (err.response) {
-		switch (err.response.status) {
-			case 401:
-				// 返回 401 清除token信息并跳转到登录页面
-				store.commit(types.LOGOUT);
-				router.replace({
-					path: 'login',
-					query: { redirect: router.currentRoute.fullPath }
-				})
-		}
-	}
-	return Promise.reject(err)
-})
+// instance.interceptors.response.use(response => {
+// 	return response
+// }, err => {
+// 	if (err.response) {
+// 		switch (err.response.status) {
+// 			case 401:
+// 				// 返回 401 清除token信息并跳转到登录页面
+// 				store.commit(types.LOGOUT);
+// 				router.replace({
+// 					path: 'login',
+// 					query: { redirect: router.currentRoute.fullPath }
+// 				})
+// 		}
+// 	}
+// 	return Promise.reject(err)
+// })
 
 export default {
-	// 用户注册
-	userRegister(data) {
-		return instance.post('/hapi/register', data)
-	},
-	// 用户登录
-	UserLogin(data) {
-		return instance.post('/hapi/login', data)
-	},
-	// 获取用户
-	getUser() {
-		return instance.get('/hapi/user')
-	},
-	// 删除用户
-	delUser(data) {
-		return instance.post('/hapi/delUser', data)
-	},
-	// 获取group
-	getGroups() {
-		return instance.get('/hapi/groups')
+	// // 用户注册
+	// userRegister(data) {
+	// 	return instance.post('/hapi/register', data)
+	// },
+	// // 用户登录
+	// UserLogin(data) {
+	// 	return instance.post('/hapi/login', data)
+	// },
+	// // 获取用户
+	// getUser() {
+	// 	return instance.get('/hapi/user')
+	// },
+	// // 删除用户
+	// delUser(data) {
+	// 	return instance.post('/hapi/delUser', data)
+	// },
+	// 获取bakery
+	getBakery() {
+		return instance.get('/api/bakery')
 	}
 }

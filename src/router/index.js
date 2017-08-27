@@ -6,11 +6,11 @@ Vue.use(Router)
 
 const router = new Router({
 	routes: [{
-		path: '/',
-		name: 'Group',
+		path: '/bakery',
+		name: 'bakery',
 		component(resolve) {
-			require.ensure(['@/components/Group.vue'], () => {
-				resolve(require('@/components/Group.vue'));
+			require.ensure(['@/components/bakery.vue'], () => {
+				resolve(require('@/components/bakery.vue'));
 			});
 		},
 		// 设置 mata 字段，表示该字段需要验证
@@ -18,24 +18,25 @@ const router = new Router({
 			requireAuth: true
 		}
 	},
-	{
-		path: '/login',
-		name: 'login',
-		component(resolve) {
-			require.ensure(['@/components/Login.vue'], () => {
-				resolve(require('@/components/Login.vue'));
-			});
-		}
-	},
-	{
-		path: '/register',
-		name: 'register',
-		component(resolve) {
-			require.ensure(['@/components/Register.vue'], () => {
-				resolve(require('@/components/Register.vue'));
-			});
-		}
-	},
+	// {
+	// 	path: '/login',
+	// 	name: 'login',
+	// 	component(resolve) {
+	// 		require.ensure(['@/components/Login.vue'], () => {
+	// 			resolve(require('@/components/Login.vue'));
+	// 		});
+	// 	}
+	// },
+	// {
+	// 	path: '/register',
+	// 	name: 'register',
+	// 	component(resolve) {
+	// 		require.ensure(['@/components/Register.vue'], () => {
+	// 			resolve(require('@/components/Register.vue'));
+	// 		});
+	// 	}
+	// },
+
 	// 简单设置404页面
 	{
 		path: '*',
@@ -50,20 +51,20 @@ const router = new Router({
 })
 
 // 验证 token，存在才跳转
-router.beforeEach((to, from, next) => {
-	let token = localStorage.getItem('token')
-	if (to.meta.requireAuth) {
-		if (token) {
-			next()
-		} else {
-			next({
-				path: '/login',
-				query: { redirect: to.fullPath }
-			})
-		}
-	} else {
-		next()
-	}
-})
+// router.beforeEach((to, from, next) => {
+// 	let token = localStorage.getItem('token')
+// 	if (to.meta.requireAuth) {
+// 		if (token) {
+// 			next()
+// 		} else {
+// 			next({
+// 				path: '/login',
+// 				query: { redirect: to.fullPath }
+// 			})
+// 		}
+// 	} else {
+// 		next()
+// 	}
+// })
 
 export default router
