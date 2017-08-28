@@ -23,7 +23,7 @@ const queryAll = (req, res) => {
 		if (err) console.log(err)
 		connection.query($sql.queryAll, (err, result) => {
 			if (err) console.log(err)
-			jsonWrite(res, results);
+			jsonWrite(res, result);
 			res.send(result); 
 			console.log(result);
 			connection.release();

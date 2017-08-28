@@ -14,7 +14,7 @@
 
 <script>
 // import * as types from '../store/types'
-import axios from 'axios'
+import axios from '../axios'
 // import api from '../axios'
 export default{
     name: 'bakery',
@@ -25,16 +25,9 @@ export default{
             bakeryName: ''
         }
     },
-    created() {
-        axios({
-            method: 'get',
-            url: '/bakery',
-            data: {
-                bakeryName: bakeryName,
-            },
-            timeout: 3000
-        }).then(function(response){
-            debugger
+    mounted() {
+        console.log(axios);
+        axios.getBakery().then(function(response){
             self.bakery = response.data;
         }).catch(function(error) {
             console.log(error);
