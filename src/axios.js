@@ -57,6 +57,21 @@ export default {
 	// },
 	// 获取bakery
 	getBakery() {
-		return instance.get('/api/bakery')
+		console.log('Im axios')
+		data: {}
+		return instance.get('/api/bakery');		
 	}
 }
+// export const requestLogin = params => { 
+// 	return axios
+// 	.post(`${base}/login`, params).then(res => res.data); 
+// }; 
+// export const getDialog = params => { 
+// 	return instance
+// 	.get(base+'/dialogue',{ params: params }); }; 
+// export const getUser= params => { 
+// 	return instance
+// 	.get(base+'/user',{ params: params }); }; 
+// export const getRebotContent = params => { 
+// 	return instance
+// 	.get('http://www.tuling123.com/openapi/api',{ params: params }); }

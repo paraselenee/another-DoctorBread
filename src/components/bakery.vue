@@ -1,8 +1,8 @@
 <template scope='scope'>
     <div>
         <h1>{{msg}}</h1>
-        <div v-for="item in bakery">
-            <li> {{item.bakeryName}} </li> 
+        <div v-for="(item,index) in bakery">
+            <li> {{item.bakeryName}} {{item.address}}</li> 
             <!-- <el-collapse v-model="activeNames" @change="handleChange">
                 <el-collapse-item v-title="item" name="1">
                     <div> {{bakeryAdress}} </div>
@@ -13,40 +13,33 @@
 </template>
 
 <script>
-// import * as types from '../store/types'
 import axios from '../axios'
-// import api from '../axios'
 export default{
     name: 'bakery',
     data(){
         return{
             msg: '面包店',
-            bakery: '',
-            bakeryName: ''
+            bakery: {},
+            bakeryName: '',
+            address:''
         }
     },
     mounted() {
-        console.log(axios);
-        axios.getBakery().then(function(response){
+        var self = this;
+        axios.getBakery()
+        .then(function(response){
             self.bakery = response.data;
-        }).catch(function(error) {
-            console.log(error);
-            self.classFade = '';
-            self.errinfo = '服務器繁忙，請刷新頁面或者稍後重試!(Error code: 504)'
+            console.log('bakery:'+self.bakery[0].bakeryName);
         })
-        // getBakery() {
-        //     let loadingInstance = Loading.service();
-        //     api.getBakery.then((data) => {
-        //         this.bakery = {};
-        //         data.data.forEach((element) => {
-        //             this.groups.arr.push(element);
-        //         },this)
-        //         loadingInstance.close();
-        //         console.log(data)
-        //     },(err) => {
-        //         loadingInstance.close();
-        //     })
-        // }
+        .catch(function (error) {
+            if (error.response) {
+                console.log('data:'+error.response.data);
+                console.log('status:'+error.response.status);
+                console.log('headers:'+error.response.headers);
+                self.classFade = '';
+                self.errinfo = '服務器繁忙，請刷新頁面或者稍後重試!(Error code: 504)'       
+            }
+        })
     }
 }
 

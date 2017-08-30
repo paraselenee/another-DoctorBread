@@ -2,7 +2,7 @@
     <div id="app">
         <img src="./assets/logo.png" class="logo" v-if="['login', 'register'].indexOf($route.name) > -1">
         <!-- <navigation v-if="['login', 'register'].indexOf($route.name) == -1"></navigation> -->
-        <bakery></bakery>
+        <!-- <bakery></bakery> -->
         <router-view></router-view>
     </div>
 </template>
@@ -12,10 +12,10 @@
 import bakery from '@/components/bakery.vue'
 export default {
     name: 'app',
-    components: {
-        bakery
-        // Navigation
-    }
+    // components: {
+    //     bakery
+    //     // Navigation
+    // }
 }
 </script>
 
