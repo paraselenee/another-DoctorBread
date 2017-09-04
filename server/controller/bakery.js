@@ -20,7 +20,9 @@ const jsonWrite = function (res, ret) {
 
 const queryAll = (req, res) => {
 	pool.getConnection((err, connection) => {
-		if (err) console.log('err:'+err)
+		if (err) 
+			console.log('err:'+err);
+			throw error;
 		connection.query($sql.queryAll, (err, result) => {
 			if (err) console.log('err:'+err)
 			jsonWrite(res, result);
@@ -28,52 +30,42 @@ const queryAll = (req, res) => {
 		});
 	});
 };
-// var resultData=result;
-// if(result!==undefined){
-// 	 pageParams.totalResult=result[1][0].count;
-// 	 resultData= {
-// 		 accountList: result[0],
-// 		 total: result[1][0].total,
-// 		 accountTypeList:result[2],
-// 		 page: pageParams,
-// 		 code: 0
-// 	 };
-// }
-// jsonWrite(res, resultData);
-// connection.release();
 
-// const add = function (req, res, next) {
-// 	pool.getConnection(function(err, connection) {
-// 		if (err) throw err; 
-// 		var param = req.body;
-// 		if((param.bakeryName == undefined )||(param.bakeryName == '' )) {
-// 			jsonWrite(res, '面包店叫啥勒');
-// 			return;
-// 		}            
-// 		connection.query($sql.insert, [param.bakeryName, param.address, param.image], function(err, result) {
-// 		console.log(err);
-// 			if(result) {
-// 				res.render('suc');    
-// 			}
-// 			connection.release();
-// 		});
-// 	});
-// };
+const add = function (req, res, next) {
+	pool.getConnection(function(err, connection) {
+		if (err) throw err; 
+		var param = req.body;
+		if((param.bakeryName == undefined )||(param.bakeryName == '' )) {
+			jsonWrite(res, '面包店叫啥勒');
+			return;
+		}            
+		connection.query($sql.insert, [param.bakeryName, param.address, param.image], function(err, result) {
+		console.log(err);
+			if(result) {
+				res.render('suc');    
+			}
+			connection.release();
+		});
+	});
+};
 
-// const remove = function (req, res, next) {
-// 	pool.getConnection(function(err, connection) {
-// 		connection.query($sql.delete, req.params.bakeryId, function(err, result) {
-// 			if(result.affectedRows > 0) {
-// 				res.render('suc');
-// 			} else {
-// 				res.render('fail',{
-// 					result: result
-// 				});
-// 			}
-// 			connection.release();
-// 		});
-// 	});
-// };
+const remove = function (req, res) {
+	pool.getConnection(function(err, connection) {
+		console.log('connectionErr:'+err);
+		connection.query($sql.delete, req.params.bakeryId, function(err, result) {
+			if(result.affectedRows > 0) {
+				jsonWrite('success!');
+				// res.render('suc');
+			} else {
+				jsonWrite('fail!');
+				// res.render('fail',{
+				// 	result: result
+				// });
+			}
+			connection.release();
+		});
+	});
+};
 
 // const updateChart = function (req, res, next) {
 // 	pool.getConnection(function(err, connection) {
@@ -117,11 +109,11 @@ const queryAll = (req, res) => {
 // };
 
 module.exports = (router) => {
-	router.get('/bakery', queryAll)
-	// router.post('/add', add),	
-	// router.post('/delete/:bakeryId', remove),	
-	// router.get('/update/:bakeryId', updateChart),	
-	// router.post('/update/:bakeryId', update),	
-	// router.get('/query', queryById)
+	router.get('/bakery', queryAll),
+	// router.post('/bakery/add', add),	
+	router.post('/bakery/remove/', remove)
+	// router.get('/bakery/update/:bakeryId', updateChart),	
+	// router.post('/bakery/update/:bakeryId', update),	
+	// router.get('/bakery/query', queryById)
 }
 	

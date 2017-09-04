@@ -57,9 +57,13 @@ export default {
 	// },
 	// 获取bakery
 	getBakery() {
-		console.log('Im axios')
-		data: {}
+		console.log('Im axios');
+		data: {};
 		return instance.get('/api/bakery');		
+	},
+	removeBakery(bakeryId){
+		console.log('removeBakery');
+		return instance.post('/api/bakery/remove', bakeryId);
 	}
 }
 // export const requestLogin = params => { 
