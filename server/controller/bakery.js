@@ -20,11 +20,13 @@ const jsonWrite = function (res, ret) {
 
 const queryAll = (req, res) => {
 	pool.getConnection((err, connection) => {
-		if (err) 
+		if (err) {
 			console.log('err:'+err);
 			throw error;
+		}
 		connection.query($sql.queryAll, (err, result) => {
 			if (err) console.log('err:'+err)
+				console.log(String(result))
 			jsonWrite(res, result);
 			connection.release();	//wfnuser的神来之笔：不能res.send()
 		});
@@ -50,19 +52,26 @@ const add = function (req, res, next) {
 };
 
 const remove = function (req, res) {
+	console.log('comon')
+	console.log('req:'+String(req));
 	pool.getConnection(function(err, connection) {
-		console.log('connectionErr:'+err);
-		connection.query($sql.delete, req.params.bakeryId, function(err, result) {
-			if(result.affectedRows > 0) {
-				jsonWrite('success!');
-				// res.render('suc');
-			} else {
-				jsonWrite('fail!');
-				// res.render('fail',{
-				// 	result: result
-				// });
+		console.log('body:'+String(req.body));
+		console.log('params:'+String(req.params));
+		connection.query($sql.delete, req.body.bakeryId, function(err, result) {
+			console.log('result:'+String(result));
+			if (err) console.log(err);
+			else{
+				if(result.affectedRows > 0) {
+					jsonWrite(res, result);
+					// res.render('suc');
+				} else {
+					jsonWrite(res, result);
+					// res.render('fail',{
+					// 	result: result
+					// });
+				}
+				connection.release();
 			}
-			connection.release();
 		});
 	});
 };
@@ -111,7 +120,7 @@ const remove = function (req, res) {
 module.exports = (router) => {
 	router.get('/bakery', queryAll),
 	// router.post('/bakery/add', add),	
-	router.post('/bakery/remove/', remove)
+	router.post('/bakery/remove', remove)
 	// router.get('/bakery/update/:bakeryId', updateChart),	
 	// router.post('/bakery/update/:bakeryId', update),	
 	// router.get('/bakery/query', queryById)

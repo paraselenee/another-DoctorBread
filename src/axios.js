@@ -61,9 +61,14 @@ export default {
 		data: {};
 		return instance.get('/api/bakery');		
 	},
-	removeBakery(bakeryId){
-		console.log('removeBakery');
-		return instance.post('/api/bakery/remove', bakeryId);
+	removeBakery(data){
+		return instance.post('/api/bakery/remove', {
+			bakeryId: data
+		});
+		//TODO: 删除某个bakery里的所有面包
+		// return instance.post('/api/bread/remove', {
+		// 	bakeryId: data
+		// });
 	}
 }
 // export const requestLogin = params => { 

@@ -2,7 +2,7 @@ var sqlMap = {
 	bakery: {
 		insert:'INSERT INTO bakery(bakeryName, address, image) VALUES(?,?,?)',
 	    update:'UPDATE bakery SET bakeryName=?, address=?, image=? WHERE bakeryId=?',
-	    delete: 'DELETE FROM bakery WHERE bakeryId=?',
+	    delete:'DELETE FROM bakery WHERE bakeryId=?',
 	    queryById: 'SELECT * FROM bakery WHERE bakeryId=?',
 	    queryAll: 'SELECT * FROM bakery'
 	},

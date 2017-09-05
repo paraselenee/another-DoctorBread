@@ -52,29 +52,25 @@ export default{
     },
     methods:{
         remove(name, id){
+            var self = this;
             let reminder = '删掉'+name+'和里面的所有面包？';
             this.$confirm(reminder, '提示', {
                 confirmButtonText: '确定',
                 cancelButtonText: '取消',
                 type: 'warning'
             }).then(() => {
-                let bakeryId = id
-                console.log('id:'+bakeryId)
-                axios.removeBakery(bakeryId)
+                axios.removeBakery(id)
                 .then((response)=> {  
-                    if (response.status == '200'){
+                    if (response.status=='200'){
                         this.$message({
                             type: 'success',
                             message: '删除成功!'
                         });
                     }    
                     else{
-                        console.log('data:'+error.response.data);
-                        console.log('status:'+error.response.status);
-                        console.log('headers:'+error.response.headers);
                         this.$message({
                             type: 'error',
-                            message: '删除失败'
+                            message: '删除失败!'
                         }); 
                     }                 
                 })
@@ -82,7 +78,7 @@ export default{
                 this.$message({
                     type: 'info',
                     message: '已取消删除'
-                });          
+                });     
             });
 
         }
