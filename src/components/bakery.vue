@@ -38,9 +38,9 @@
                 </template>
             </el-table-column>
 
-            <el-table-column prop="bakeryName" :sortable="true" :key="bakeryId"></el-table-column>
+            <el-table-column prop="bakeryName" :sortable="true"></el-table-column>
             <!-- :sortMethod="getNewOrder(bakeryName)" -->
-            <el-table-column :key="bakeryId">
+            <el-table-column>
                 <template scope="bakeryRow">
                     <el-button-group>
                         <el-button type="primary" icon="edit" 
@@ -50,8 +50,7 @@
                         @click.native.prevent="deleteRow(
                                 bakeryRow.row.bakeryId, 
                                 bakeryRow.row.bakeryName, 
-                                bakery_list,
-                                bakeryRow.$index, 
+                                bakeryRow.row.arrId,
                                 'bakery')">
                         </el-button>
                     </el-button-group>
@@ -86,7 +85,12 @@ export default {
             var self = this;    //then中this作用域不同，此时this = undefined
             axios.getBakery()
                 .then((response) => {
-                    self.bakery_list = response.data;
+                    this.bakery_list = [];
+                    let arrId = 0;
+                    response.data.forEach(function(obj) {
+                        obj.arrId = arrId ++;
+                        this.bakery_list.push(obj);
+                    }, this);
                 })
                 .catch((error) => {
                     if (error.response) {
@@ -133,8 +137,7 @@ export default {
                     }
                 })
         },
-        deleteRow(id, name, rows, index, type) {
-            var self = rows;
+        deleteRow(id, name, index, type) {
             // if (type == 'bakery') {
                 var reminder = '删掉' + name + '和里面的所有面包？';
             // } else {
@@ -155,7 +158,8 @@ export default {
                                     type: 'success',
                                     message: '删除成功!'
                                 });
-                                self.splice(index, 1);
+                                console.log(this.bakery_list);
+                                this.bakery_list.splice(index, 1);
                             }
                             else {
                                 this.$message({
