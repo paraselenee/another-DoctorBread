@@ -12,9 +12,9 @@ Vue.use(ElementUI)
 
 /* eslint-disable no-new */
 new Vue({
-		axios,
-		store,
-		router,
-		render: h => h(App)
-	})
+	axios,
+	store,
+	router,
+	render: h => h(App)
+})
 	.$mount('#app')

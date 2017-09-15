@@ -1,86 +1,196 @@
 <template scope='scope'>
     <div>
         <h1>{{msg}}</h1>
-        <div v-for="(bakery,index) in bakery_list">
-            <el-collapse  v-model="activeNames" accordion>
-                <!-- v-bind:change="handleChange"> -->
-                <el-collapse-item :title="bakery.bakeryName" :name="index">
-                    <div> 
-                        <p>{{bakery.address}}</p>
-                        <el-button-group>
-                            <el-button type="primary" icon="edit"></el-button>
-                            <el-button type="primary" icon="delete"
-                            @click="remove(bakery.bakeryName, bakery.bakeryId)"></el-button>
-                        </el-button-group>
-                    </div>
-                </el-collapse-item>
-            </el-collapse>
-        </div>
+        <el-table :data="bakery_list" style="width: 100%" row-key="bakeryId" 
+        :default-sort="{prop: 'bakeryName', order: 'descending'}">
+
+            <el-table-column type="expand">
+                <template scope="props">
+                    <el-form label-position="left" inline class="demo-table-expand">
+                        <el-form-item label="地址" :key="props.row.bakeryId">
+                            {{props.row.address}}
+                        </el-form-item>
+                        <el-form-item label="图片" :key="props.row.bakeryId">
+                            {{props.row.image}}
+                        </el-form-item>
+                        <el-form-item>
+
+                            <!-- <el-table :data="{bread_list: props.row.bakeryId}" border style="width: 100%" max-height="250">
+                                <el-table-column fixed prop="breadName" label="面包" width="150">
+                                </el-table-column>
+                                <el-table-column prop="rating" label="评分" width="120">
+                                </el-table-column>
+                                <el-table-column prop="comment" label="评论" width="120">
+                                </el-table-column>
+                                <el-table-column prop="buyAgain" label="回购" width="120">
+                                </el-table-column>
+                                <el-table-column label="操作" width="120">
+                                    <template scope="breadRow">
+                                        <el-button-group>
+                                            <el-button type="primary" icon="edit" @click="update(breadRow.$index, bakery_list)"></el-button>
+                                            <el-button type="primary" icon="delete" @click.native.prevent="deleteRow(breadRow.$index, bakery_list, 'bread')"></el-button>
+                                        </el-button-group>
+                                    </template>
+                                </el-table-column>
+                            </el-table> -->
+                        </el-form-item>
+                    </el-form>
+                </template>
+            </el-table-column>
+
+            <el-table-column prop="bakeryName" :sortable="true" :key="bakeryId"></el-table-column>
+            <!-- :sortMethod="getNewOrder(bakeryName)" -->
+            <el-table-column :key="bakeryId">
+                <template scope="bakeryRow">
+                    <el-button-group>
+                        <el-button type="primary" icon="edit" 
+                        @click="update(bakeryRow.$index, bakery_list)">
+                        </el-button>
+                        <el-button type="primary" icon="delete" 
+                        @click.native.prevent="deleteRow(
+                                bakeryRow.row.bakeryId, 
+                                bakeryRow.row.bakeryName, 
+                                bakery_list,
+                                bakeryRow.$index, 
+                                'bakery')">
+                        </el-button>
+                    </el-button-group>
+                </template>
+            </el-table-column>
+
+            </el-table-column>
+
+        </el-table>
     </div>
 </template>
 
 <script>
 import axios from '../axios'
-export default{
+export default {
     name: 'bakery',
-    data(){
-        return{
+    data() {
+        return {
             msg: '面包店',
-            bakery_list: {},
-            bakeryName: '',
-            address:'',
-            bakeryId: '',
-            activeNames: ["1"]
+            bakery_list: [],
+            bread_list: {},
+            index: '',
         }
     },
     mounted() {
-        var self = this;
-        axios.getBakery()
-        .then(function(response){
-            self.bakery_list = response.data;
-            console.log('bakery:'+self.bakery[0].bakeryName);
-        })
-        .catch(function (error) {
-            if (error.response) {
-                console.log('data:'+error.response.data);
-                console.log('status:'+error.response.status);
-                console.log('headers:'+error.response.headers);
-                self.classFade = '';
-                self.errinfo = '服務器繁忙，請刷新頁面或者稍後重試!(Error code: 504)'       
-            }
-        })
+        this.getBakery();
+        this.getAllBread();
     },
-    methods:{
-        remove(name, id){
-            var self = this;
-            let reminder = '删掉'+name+'和里面的所有面包？';
+    methods: {
+
+        getBakery() {
+            var self = this;    //then中this作用域不同，此时this = undefined
+            axios.getBakery()
+                .then((response) => {
+                    self.bakery_list = response.data;
+                })
+                .catch((error) => {
+                    if (error.response) {
+                        self.classFade = '';
+                        self.errinfo = '服務器繁忙，請刷新頁面或者稍後重試!(Error code: 504)'
+                    }
+                })
+        },
+        // getBreadByBakery(id) {
+        //     axios.getBreadByBakery(id)
+        //         .then((response) => {
+        //             self.bread_list = response.data;
+        //         })
+        //         .catch((error) => {
+        //             if (error.response) {
+        //                 self.classFade = '';
+        //                 self.errinfo = '服務器繁忙，請刷新頁面或者稍後重試!(Error code: 504)'
+        //             }
+        //         })
+        // },
+        getAllBread() {
+            axios.getAllBread()
+                .then((response) => {
+                    let all_bread = response.data;
+                    // this.bread_list = {};
+                    // if (all_bread.length > 0) {
+                    //     all_bread.forEach((element) => {
+                    //         if (this.bread_list.hasOwnProperty(element.bakeryId)) {
+                    //             //如果该bakeryId已存在于bread_list对象中
+                    //             this.bread_list[element.bakeryId].arr.push(element);
+                    //         } else {
+                    //             this.bread_list[element.bakeryId] = {};
+                    //             this.bread_list[element.bakeryId].bakeryId = element.bakeryId;
+                    //             this.bread_list[element.bakeryId].arr = [];
+                    //             this.bread_list[element.bakeryId].arr.push(element);
+                    //         }
+                    //     }, this);
+                    // }
+                })
+                .catch((error) => {
+                    if (error.response) {
+                        self.classFade = '';
+                        self.errinfo = '服務器繁忙，請刷新頁面或者稍後重試!(Error code: 504)'
+                    }
+                })
+        },
+        deleteRow(id, name, rows, index, type) {
+            var self = rows;
+            // if (type == 'bakery') {
+                var reminder = '删掉' + name + '和里面的所有面包？';
+            // } else {
+            //     var reminder = '删掉' + name + '和它的信息？';
+            // }
             this.$confirm(reminder, '提示', {
                 confirmButtonText: '确定',
                 cancelButtonText: '取消',
                 type: 'warning'
             }).then(() => {
-                axios.removeBakery(id)
-                .then((response)=> {  
-                    if (response.status=='200'){
-                        this.$message({
-                            type: 'success',
-                            message: '删除成功!'
-                        });
-                    }    
-                    else{
-                        this.$message({
-                            type: 'error',
-                            message: '删除失败!'
-                        }); 
-                    }                 
-                })
+                // if (type === 'bakery') {
+                    console.log("==============id==================")
+                    console.log(id)
+                    axios.removeBakery(id)
+                        .then((response) => {
+                            if (response.status == '200') {
+                                this.$message({
+                                    type: 'success',
+                                    message: '删除成功!'
+                                });
+                                self.splice(index, 1);
+                            }
+                            else {
+                                this.$message({
+                                    type: 'error',
+                                    message: '删除失败!'
+                                });
+                            }
+                        })
+                // } else {
+                //     axios.removeBread(rows[index].breadId)
+                //         .then((response) => {
+                //             if (response.status == '200') {
+                //                 this.$message({
+                //                     type: 'success',
+                //                     message: '删除成功!'
+                //                 });
+                //                 //TODO:排序后如何使用splice：排序后index还是原来的index
+                //                 //现在排第一的id是25，于是删掉第25行
+                //                 self.splice(index, 1);
+                //             }
+                //             else {
+                //                 this.$message({
+                //                     type: 'error',
+                //                     message: '删除失败!'
+                //                 });
+                //             }
+                //         })
+
+                // }
             }).catch(() => {
                 this.$message({
                     type: 'info',
                     message: '已取消删除'
-                });     
+                });
             });
-
         }
     }
 }
