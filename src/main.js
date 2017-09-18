@@ -5,10 +5,12 @@ import App from './App'
 import router from './router'
 import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-default/index.css'
+import DataTables from 'vue-data-tables'
 import axios from './axios'
 import store from './store/index.js'
 
 Vue.use(ElementUI)
+Vue.use(DataTables)
 
 /* eslint-disable no-new */
 new Vue({

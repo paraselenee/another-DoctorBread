@@ -26,7 +26,6 @@ const queryAll = (req, res, next) => {
 		}
 		connection.query($sql.queryAll, (err, result) => {
 			if (err) console.log('err:' + err)
-			console.log(String(result))
 			jsonWrite(res, result);
 			connection.release();	//wfnuser的神来之笔：不能res.send()
 		});
@@ -41,7 +40,6 @@ const bakeryIdOrderByBakeryName  = function (req, res, next) {
 		}
 		connection.query($sql.bakeryIdOrderByBakeryName, (err, result) => {
 			if (err) console.log('err:' + err)
-			console.log(String(result))
 			jsonWrite(res, result);
 			connection.release();	//wfnuser的神来之笔：不能res.send()
 		});
@@ -67,8 +65,6 @@ const add = function (req, res, next) {
 };
 
 const remove = function (req, res) {
-	console.log("==============req==============");
-	console.log(req);
 	pool.getConnection(function (err, connection) {
 		connection.query($sql.delete, req.body.bakeryId, function (err, result) {
 			if (err) console.log(err);

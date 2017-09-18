@@ -6,7 +6,7 @@ Vue.use(Router)
 
 const router = new Router({
 	routes: [{
-		path: '/api/bakery',
+		path: '/bakery',
 		name: 'bakery',
 		component(resolve) {
 			require.ensure(['@/components/bakery.vue'], () => {

@@ -31,8 +31,6 @@ const queryByBakery = function (req, res, next) {
 };
 
 const queryAll = function(req, res, next) {
-    console.log("===========breadReq===========")
-    console.log(req)
 	pool.getConnection((err, connection) => {
 		if (err) {
 			console.log('err:' + err);
