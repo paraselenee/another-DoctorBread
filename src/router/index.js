@@ -9,8 +9,8 @@ const router = new Router({
 		path: '/bakery',
 		name: 'bakery',
 		component(resolve) {
-			require.ensure(['@/components/bakery.vue'], () => {
-				resolve(require('@/components/bakery.vue'));
+			require.ensure(['@/components/anotherBakery.vue'], () => {
+				resolve(require('@/components/anotherBakery.vue'));
 			});
 		},
 		// path: '/api/bread',
