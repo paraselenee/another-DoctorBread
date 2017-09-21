@@ -34,7 +34,7 @@
                                         <div class="white">
                                             <v-text-field append-icon="search" label="搜！" single-line hide-details v-model="searchBread"></v-text-field> <br>
                                             <div>
-                                                <v-data-table :headers="breadHeaders" :items="bakery.bread_list" :search="searchBread" class="elevation-1">
+                                                <v-data-table :headers="breadHeaders" :items="bakery.bread_list" :search="searchBread||searchQuery" class="elevation-1">
                                                     <template slot="headerCell" scope="props">
                                                         <span v-tooltip:bottom="{ 'html': props.header.text }">
                                                             {{ props.header.text }}
@@ -93,44 +93,10 @@ export default {
                 return this.bakery_list
             }
             var self = this
-            var temp_bakery_list = [];
-            temp_bakery_list = this.bakery_list.filter(function(bakery) {
+            return this.bakery_list.filter(function(bakery) {
                 var searchRegex = new RegExp(self.searchQuery, 'i') //  不分大小写
-                return searchRegex.test(bakery.bakeryName) ||
-                    searchRegex.test(bakery.address) ||
-                    bakery.bread_list.filter(function(bread) {
-                        //   return bread.breadName.indexOf(self.searchQuery) !== -1
-                        return searchRegex.test(bread.breadName) ||
-                            searchRegex.test(bread.comment)
-                    }).length != 0
-
+                return searchRegex.test(JSON.stringify(bakery)) //非常懒惰但貌似没有问题的搜法
             })
-            //wfnuser TODO: 把下面的改好
-            temp_bakery_list.forEach(function(element) {
-                element.bread_list = element.bread_list.filter(function(bread) {
-                    return bread.breadName.indexOf(self.searchQuery) !== -1
-                })
-            }, this)
-            
-            // //wfnuser TODO: 把下面的改好
-            // temp_bakery_list.forEach(function(element) {
-            //     element.bread_list = element.bread_list.filter(function(bread) {
-            //         var searchRegex = new RegExp(self.searchQuery, 'i')
-            //         return searchRegex.test(bread.breadName) || searchRegex.test(bread.comment)                
-            //     })
-            // }, this)
-            return temp_bakery_list
-            // var temp_bakery_list = [];
-            // var temp = temp_bakery_list.filter(function(bakery) {
-            //     var searchRegex = new RegExp(self.searchQuery, 'i')
-            //     var temp_bread_list = bakery.bread_list.filter(function(bread){
-            //         return searchRegex.test(bread.breadName)                
-            //     })
-            //     bakery.bread_list = temp_bread_list;
-            //     return searchRegex.test(bakery.bakeryName) || bakery.bread_list.length != 0
-            //     debugger
-            // })
-            // return temp
         }
     },
     methods: {
