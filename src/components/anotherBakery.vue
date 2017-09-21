@@ -1,7 +1,7 @@
 <template scope='scope'>
     <div id="bakery" class="container">
-        <!-- <h1>{{msg}}</h1> -->
-        <input v-model="searchQuery" class="form-control" placeholder="面包房叫啥...">
+        <h3>{{msg}}</h3>
+        <v-text-field append-icon="search" label="搜！" single-line hide-details v-model="searchQuery"></v-text-field>
         <table class="table table-striped">
             <thead>
                 <v-btn flat primary @click="sortBy('bakeryName')">
@@ -11,141 +11,126 @@
 
             <tbody>
                 <template>
-                    <v-expansion-panel focusable>
-                        <v-expansion-panel-content v-for="(bakery,index) in filtered_bakery_list" :key="index">
+                    <v-expansion-panel popout class="lime accent-1">
+                        <v-expansion-panel-content class="white" v-for="(bakery,index) in filtered_bakery_list" :key="index">
                             <div slot="header">
                                 <v-btn flat primary @click="update()">
                                     <v-icon> edit </v-icon>
                                 </v-btn>
                                 <v-btn flat primary @click="deleteRow(
-                                            bakery.bakeryId, 
-                                            bakery.bakeryName, 
-                                            index,
-                                            'bakery')">
+                                                            bakery.bakeryId, 
+                                                            bakery.bakeryName, 
+                                                            index,
+                                                            'bakery')">
                                     <v-icon> delete </v-icon>
                                 </v-btn>
                                 {{bakery.bakeryName}}
                             </div>
 
-                            <v-card>
-                                <v-card-text class="grey lighten-3">
-                                    {{bakery.address}}
-                                    <br> {{bakery.image}}
-                                    <br>
+                            <v-card class="lime accent-2">
+                                <v-card-text>
+                                    {{bakery.address}} <br> {{bakery.image}} <br>
                                     <template>
-                                        <div>
-                                            <v-data-table :headers="headers" :items="items" :search="searchBread" v-bind:pagination.sync="pagination" :total-items="totalItems" :loading="loading" class="elevation-1">
-                                                <template slot="headerCell" scope="props">
-                                                    <span v-tooltip:bottom="{ 'html': props.header.text }">
-                                                        {{ props.header.text }}
-                                                    </span>
-                                                </template>
-                                                <template slot="items" scope="props">
-                                                    <td>{{ props.item.name }}</td>
-                                                    <td class="text-xs-right">{{ props.item.calories }}</td>
-                                                    <td class="text-xs-right">{{ props.item.fat }}</td>
-                                                    <td class="text-xs-right">{{ props.item.carbs }}</td>
-                                                    <td class="text-xs-right">{{ props.item.protein }}</td>
-                                                    <td class="text-xs-right">{{ props.item.sodium }}</td>
-                                                    <td class="text-xs-right">{{ props.item.calcium }}</td>
-                                                    <td class="text-xs-right">{{ props.item.iron }}</td>
-                                                </template>
-                                            </v-data-table>
+                                        <div class="white">
+                                            <v-text-field append-icon="search" label="搜！" single-line hide-details v-model="searchBread"></v-text-field> <br>
+                                            <div>
+                                                <v-data-table :headers="breadHeaders" :items="bakery.bread_list" :search="searchBread" class="elevation-1">
+                                                    <template slot="headerCell" scope="props">
+                                                        <span v-tooltip:bottom="{ 'html': props.header.text }">
+                                                            {{ props.header.text }}
+                                                        </span>
+                                                    </template>
+                                                    <template slot="items" scope="props">
+                                                        <td class="text-xs-left">{{ props.item.breadName }}</td>
+                                                        <td class="text-xs-left">{{ props.item.rating }}</td>
+                                                        <td class="text-xs-left">{{ props.item.comment }}</td>
+                                                        <td class="text-xs-left">{{ props.item.buyAgain }}</td>
+                                                    </template>
+                                                </v-data-table>
+                                            </div>
                                         </div>
                                     </template>
                                 </v-card-text>
                             </v-card>
-
                         </v-expansion-panel-content>
                     </v-expansion-panel>
                 </template>
             </tbody>
         </table>
-
-        <!-- <el-table-column type="expand">
-                <template scope="props">
-                    <el-form label-position="left" inline class="demo-table-expand">
-                        <el-form-item label="地址" :key="props.row.bakeryId">
-                            {{props.row.address}}
-                        </el-form-item>
-                        <el-form-item label="图片" :key="props.row.bakeryId">
-                            {{props.row.image}}
-                        </el-form-item>
-                        <el-form-item>
-
-                            <el-table :data="{bread_list: props.row.bakeryId}" border style="width: 100%" max-height="250">
-                                                <el-table-column fixed prop="breadName" label="面包" width="150">
-                                                </el-table-column>
-                                                <el-table-column prop="rating" label="评分" width="120">
-                                                </el-table-column>
-                                                <el-table-column prop="comment" label="评论" width="120">
-                                                </el-table-column>
-                                                <el-table-column prop="buyAgain" label="回购" width="120">
-                                                </el-table-column>
-                                                <el-table-column label="操作" width="120">
-                                                    <template scope="breadRow">
-                                                        <el-button-group>
-                                                            <el-button type="primary" icon="edit" @click="update(breadRow.$index, bakery_list)"></el-button>
-                                                            <el-button type="primary" icon="delete" @click.native.prevent="deleteRow(breadRow.$index, bakery_list, 'bread')"></el-button>
-                                                        </el-button-group>
-                                                    </template>
-                                                </el-table-column>
-                                            </el-table>
-                        </el-form-item>
-                    </el-form>
-                </template>
-            </el-table-column>
-
-            <el-table-column label="操作">
-                <template scope="bakeryRow">
-                    <el-button-group>
-                        <el-button type="primary" icon="edit" @click="update(bakeryRow.$index, bakery_list)">
-                        </el-button>
-                        <el-button type="primary" icon="delete" @click.native.prevent="deleteRow(
-                                                bakeryRow.row.bakeryId, 
-                                                bakeryRow.row.bakeryName, 
-                                                bakeryRow.row.arrId,
-                                                'bakery')">
-                        </el-button>
-                    </el-button-group>
-                </template>
-            </el-table-column> -->
     </div>
 </template>
 
 <script>
 import axios from '../axios'
 import _ from 'underscore'
+
 var times = 0;
 export default {
     name: 'anotherBakery',
     data() {
         return {
-            // msg: '面包店',
+            msg: '面包店',
             bakery_list: [],
             bread_list: {},
             searchQuery: '',
             searchBread: '',
             sortKey: "bakeryName",
             reverse: false,
-            toggle_multiple: [0, 1, 2],
             breadHeaders: [
-                { text: '面包', align: 'left', sortable: false, value: 'breadName'},
+                { text: '面包', align: 'left', sortable: false, value: 'breadName' },
                 { text: '评分', sortable: true, value: 'rating' },
-                { text: '评价', value: 'comment' },
+                { text: '评价', sortable: false, value: 'comment' },
                 { text: '买了几次', sortable: true, value: 'buyAgain' }
-            ]
+            ],
         }
     },
     mounted() {
         this.getBakery();
     },
     computed: {
-        filtered_bakery_list: function() {
-            var self = this;
-            return self.bakery_list.filter(function(bakery) {
-                return bakery.bakeryName.indexOf(self.searchQuery) !== -1
+        filtered_bakery_list: function(index) {
+            if (this.searchQuery == '') {
+                return this.bakery_list
+            }
+            var self = this
+            var temp_bakery_list = [];
+            temp_bakery_list = this.bakery_list.filter(function(bakery) {
+                var searchRegex = new RegExp(self.searchQuery, 'i') //  不分大小写
+                return searchRegex.test(bakery.bakeryName) ||
+                    searchRegex.test(bakery.address) ||
+                    bakery.bread_list.filter(function(bread) {
+                        //   return bread.breadName.indexOf(self.searchQuery) !== -1
+                        return searchRegex.test(bread.breadName) ||
+                            searchRegex.test(bread.comment)
+                    }).length != 0
+
             })
+            //wfnuser TODO: 把下面的改好
+            temp_bakery_list.forEach(function(element) {
+                element.bread_list = element.bread_list.filter(function(bread) {
+                    return bread.breadName.indexOf(self.searchQuery) !== -1
+                })
+            }, this)
+            
+            // //wfnuser TODO: 把下面的改好
+            // temp_bakery_list.forEach(function(element) {
+            //     element.bread_list = element.bread_list.filter(function(bread) {
+            //         var searchRegex = new RegExp(self.searchQuery, 'i')
+            //         return searchRegex.test(bread.breadName) || searchRegex.test(bread.comment)                
+            //     })
+            // }, this)
+            return temp_bakery_list
+            // var temp_bakery_list = [];
+            // var temp = temp_bakery_list.filter(function(bakery) {
+            //     var searchRegex = new RegExp(self.searchQuery, 'i')
+            //     var temp_bread_list = bakery.bread_list.filter(function(bread){
+            //         return searchRegex.test(bread.breadName)                
+            //     })
+            //     bakery.bread_list = temp_bread_list;
+            //     return searchRegex.test(bakery.bakeryName) || bakery.bread_list.length != 0
+            //     debugger
+            // })
+            // return temp
         }
     },
     methods: {
@@ -187,44 +172,6 @@ export default {
                     }
                 })
         },
-        // getBreadByBakery(id) {
-        //     axios.getBreadByBakery(id)
-        //         .then((response) => {
-        //             self.bread_list = response.data;
-        //         })
-        //         .catch((error) => {
-        //             if (error.response) {
-        //                 self.classFade = '';
-        //                 self.errinfo = '服務器繁忙，請刷新頁面或者稍後重試!(Error code: 504)'
-        //             }
-        //         })
-        // },
-        // getAllBread() {
-        //     axios.getAllBread()
-        //         .then((response) => {
-        //             let all_bread = response.data;
-        //             // this.bread_list = {};
-        //             // if (all_bread.length > 0) {
-        //             //     all_bread.forEach((element) => {
-        //             //         if (this.bread_list.hasOwnProperty(element.bakeryId)) {
-        //             //             //如果该bakeryId已存在于bread_list对象中
-        //             //             this.bread_list[element.bakeryId].arr.push(element);
-        //             //         } else {
-        //             //             this.bread_list[element.bakeryId] = {};
-        //             //             this.bread_list[element.bakeryId].bakeryId = element.bakeryId;
-        //             //             this.bread_list[element.bakeryId].arr = [];
-        //             //             this.bread_list[element.bakeryId].arr.push(element);
-        //             //         }
-        //             //     }, this);
-        //             // }
-        //         })
-        //         .catch((error) => {
-        //             if (error.response) {
-        //                 self.classFade = '';
-        //                 self.errinfo = '服務器繁忙，請刷新頁面或者稍後重試!(Error code: 504)'
-        //             }
-        //         })
-        // },
         deleteRow(id, name, index, type) {
             if (type == 'bakery') {
                 var reminder = '删掉' + name + '和里面的所有面包？';
