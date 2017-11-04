@@ -15,13 +15,19 @@ const router = new Router({
 		},
 		meta: {
 			requireAuth: true
+		}
+	},
+	{
+		path: '/bakery/update/:id',
+		name: 'bakery_edit',
+		component(resolve) {
+			require.ensure(['@/components/updateBakery.vue'], () => {
+				resolve(require('@/components/updateBakery.vue'));
+			});
 		},
-		// children: [
-		// 	{
-		// 		path: 'update/:id',
-		// 		component: updateBakery
-		// 	}
-		// ]
+		meta: {
+			requireAuth: true
+		}
 	},
 	// {
 	// 	path: '/login',
