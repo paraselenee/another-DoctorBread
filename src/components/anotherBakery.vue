@@ -102,12 +102,6 @@ function compare(num1, num2) {
 
 export default {
     name: 'anotherBakery',
-    // props: {
-    //     resource: {
-    //     required: true,
-    //     type: String
-    //     }
-    // },
     data() {
         return {
             msg: '面包店',
@@ -257,7 +251,6 @@ export default {
             });
         },
         update(id) {
-            // let redirect = decodeURIComponent(this.$route.query.redirect || '/');
             this.$router.push('/bakery/update/' + id + '/')
             //切换路由到edit页面。
         }
@@ -267,39 +260,4 @@ export default {
 </script>
 
 <style scoped>
-body {
-    margin: 2em 0;
-}
-
-a.active {
-    font-weight: bold;
-    color: black;
-}
-
-.text {
-    font-size: 14px;
-}
-
-.item {
-    padding: 18px 0;
-}
-
-.clearfix:before,
-.clearfix:after {
-    display: table;
-    content: "";
-}
-
-.clearfix:after {
-    clear: both
-}
-
-a {
-    color: #4078c0;
-    text-decoration: none;
-}
-
-sortable {
-    cursor: pointer;
-}
 </style>

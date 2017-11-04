@@ -32,20 +32,6 @@ const queryAll = (req, res, next) => {
 	});
 };
 
-const bakeryIdOrderByBakeryName  = function (req, res, next) {
-	pool.getConnection((err, connection) => {
-		if (err) {
-			console.log('err:' + err);
-			throw error;
-		}
-		connection.query($sql.bakeryIdOrderByBakeryName, (err, result) => {
-			if (err) console.log('err:' + err)
-			jsonWrite(res, result);
-			connection.release();	//wfnuser的神来之笔：不能res.send()
-		});
-	});
-};
-
 const add = function (req, res, next) {
 	pool.getConnection(function (err, connection) {
 		if (err) console.log(err);
@@ -79,17 +65,6 @@ const remove = function (req, res) {
 		});
 	});
 };
-
-// const updateChart = function (req, res, next) {
-// 	pool.getConnection(function(err, connection) {
-// 		connection.query($sql.queryById, req.params.bakeryId, function(err, result) {
-// 			res.render('updateBakery',{
-// 				list: result
-// 			});
-// 			connection.release();
-// 		});
-// 	});
-// };
 
 const update = function (req, res, next) {
 	var param = req.body;

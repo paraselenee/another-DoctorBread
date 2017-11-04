@@ -3,24 +3,16 @@
 import Vue from 'vue'
 import App from './App'
 import router from './router'
-import ElementUI from 'element-ui'
-import 'element-ui/lib/theme-default/index.css'
-// import DataTables from 'vue-data-tables'
 import axios from './axios'
-import store from './store/index.js'
 import _ from 'underscore'
 import Vuetify from 'vuetify'
 import'vuetify/dist/vuetify.min.css'
 
-
-Vue.use(ElementUI)
-// Vue.use(DataTables)
 Vue.use(Vuetify)
 
 /* eslint-disable no-new */
 new Vue({
 	axios,
-	store,
 	router,
 	render: h => h(App)
 })

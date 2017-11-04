@@ -1,21 +1,12 @@
 <template>
     <div id="app">
-        <img src="./assets/logo.png" class="logo" v-if="['login', 'register'].indexOf($route.name) > -1">
-        <!-- <navigation v-if="['login', 'register'].indexOf($route.name) == -1"></navigation> -->
-        <!-- <bakery></bakery> -->
         <router-view></router-view>
     </div>
 </template>
 
 <script>
-// import Navigation from '@/components/Navigation.vue'
-import bakery from '@/components/bakery.vue'
 export default {
-    name: 'app',
-    // components: {
-    //     bakery
-    //     // Navigation
-    // }
+    name: 'app'
 }
 </script>
 
@@ -28,9 +19,4 @@ export default {
     color: #2c3e50;
 }
 
-.logo {
-    position: relative;
-    margin-top: 40px;
-    margin-bottom: 40px;
-}
 </style>
