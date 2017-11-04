@@ -12,16 +12,47 @@
         <v-expansion-panel popout class="lime accent-1">
             <v-expansion-panel-content class="white" v-for="(bakery,index) in filtered_bakery_list" :key="index">
                 <div slot="header">
-                    <v-btn flat primary @click="update()">
+                    <!-- <template>   到其他页面上做
+                        <v-dialog v-model="dialog" persistent>
+                            <v-btn flat primary slot="activator">
+                                <v-icon> edit </v-icon>
+                            </v-btn>
+                            <v-card>
+                                <v-card-title>
+                                    <span class="headline">User Profile</span>
+                                </v-card-title>
+                                <v-card-text>
+                                    <v-container grid-list-md>
+                                        <v-layout wrap>
+                                            <v-flex>
+                                                <v-text-field label="面包店" required></v-text-field>
+                                            </v-flex>
+                                            <v-flex>
+                                                <v-text-field label="地址" ></v-text-field>
+                                            </v-flex>
+                                        </v-layout>
+                                    </v-container>
+                                </v-card-text>
+                                <v-card-actions>
+                                    <v-spacer></v-spacer>
+                                    <v-btn color="blue darken-1" flat @click.native="dialog = false">Close</v-btn>
+                                    <v-btn color="blue darken-1" flat  @click="update(bakery.bakeryId)" @click.native="dialog = false">Save</v-btn>
+                                </v-card-actions>
+                            </v-card>
+                        </v-dialog>
+                    </template> -->
+
+                    <v-btn flat primary @click="update(bakery.bakeryId)">
                         <v-icon> edit </v-icon>
                     </v-btn>
-                    <v-btn flat primary @click="deleteRow(
+
+                    <!-- <v-btn flat primary @click="deleteRow(
                                                 bakery.bakeryId, 
                                                 bakery.bakeryName, 
                                                 index,
                                                 'bakery')">
                         <v-icon> delete </v-icon>
-                    </v-btn>
+                    </v-btn> -->
                     {{bakery.bakeryName}}
                 </div>
 
@@ -38,7 +69,8 @@
                                         </span>
                                     </template>
                                     <template slot="items" scope="props">
-                                        <td class="text-xs-left">{{ props.item.breadName }}</td>
+                                        <td class="text-xs-left">
+                                            {{ props.item.breadName }}</td>
                                         <td class="text-xs-left">{{ props.item.rating }}</td>
                                         <td class="text-xs-left">{{ props.item.comment }}</td>
                                         <td class="text-xs-left">{{ props.item.buyAgain }}</td>
@@ -57,19 +89,25 @@
 import axios from '../axios'
 import _ from 'underscore'
 function compare(num1, num2) {
-        var temp1 = parseInt(num1);
-        var temp2 = parseInt(num2);
-        if (temp1 < temp2) {
-            return -1;
-        } else if (temp1 == temp2) {
-            return 0;
-        } else {
-            return 1;
-        }
+    var temp1 = parseInt(num1);
+    var temp2 = parseInt(num2);
+    if (temp1 < temp2) {
+        return -1;
+    } else if (temp1 == temp2) {
+        return 0;
+    } else {
+        return 1;
     }
+}
 
 export default {
     name: 'anotherBakery',
+    // props: {
+    //     resource: {
+    //     required: true,
+    //     type: String
+    //     }
+    // },
     data() {
         return {
             msg: '面包店',
@@ -85,6 +123,7 @@ export default {
                 { text: '评价', sortable: false, value: 'comment' },
                 { text: '买了几次', sortable: true, value: 'buyAgain' }
             ],
+            dialog: false
         }
     },
     mounted() {
@@ -103,7 +142,7 @@ export default {
         }
     },
     methods: {
-        sortBy: function(sortKey) {
+        sortBy(sortKey) {
             this.reverse = (this.sortKey == sortKey) ? !this.reverse : false;
             this.sortKey = sortKey;
             let self = this;
@@ -143,9 +182,11 @@ export default {
                                     }, this);
                                     bakery.averageRating = sumOfRating / (bakery.bread_list.length);
                                 }
-                                console.log(bakery.bakeryName)
-                                console.log(bakery.averageRating);
+                                // if (bakery.bakeryId % 10 == 0){
                                 self.bakery_list.push(bakery);
+                                // } else {
+                                //     self.bakery_list = self.bakery_list;
+                                // }
                             })
                             .catch((error) => {
                                 if (error.response) {
@@ -214,31 +255,16 @@ export default {
                     message: '已取消删除'
                 });
             });
+        },
+        update(id) {
+            // let redirect = decodeURIComponent(this.$route.query.redirect || '/');
+            this.$router.push('/bakery/edit/'+id+'/');
+            this.$router.push({ name: 'edit', params: { bakeryId: id }})
+
+            //切换路由到edit页面。
         }
     }
 }
-
-
-//TODO:selected option
-// #app
-//   select(@change="changeItem(rowId, $event)")
-//     option select item
-//     option(value="value1") value1
-//     option(value="value2") value2
-//   p {{selected}}
-
-// const app = new Vue({
-//     el: '#app',
-//     data: {
-//     selected: "selected",
-//     rowId: 10
-// },
-// methods: {
-//     changeItem(rowId, event) {
-//         this.selected = `${rowId}, ${event.target.value}`
-//     }
-// }
-// })
 
 </script>
 

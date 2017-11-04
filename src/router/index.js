@@ -13,17 +13,15 @@ const router = new Router({
 				resolve(require('@/components/anotherBakery.vue'));
 			});
 		},
-		// path: '/api/bread',
-		// name: 'bread',
-		// component(resolve) {
-		// 	require.ensure(['@/components/bakery.vue'], () => {
-		// 		resolve(require('@/components/bakery.vue'));
-		// 	});
-		// },
-		// 设置 mata 字段，表示该字段需要验证
 		meta: {
 			requireAuth: true
-		}
+		},
+		// children: [
+		// 	{
+		// 		path: 'update/:id',
+		// 		component: updateBakery
+		// 	}
+		// ]
 	},
 	// {
 	// 	path: '/login',
