@@ -258,9 +258,7 @@ export default {
         },
         update(id) {
             // let redirect = decodeURIComponent(this.$route.query.redirect || '/');
-            this.$router.push('/bakery/edit/'+id+'/');
-            this.$router.push({ name: 'edit', params: { bakeryId: id }})
-
+            this.$router.push('/bakery/update/' + id + '/')
             //切换路由到edit页面。
         }
     }

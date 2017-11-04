@@ -22,7 +22,6 @@ const queryByBakery = function (req, res, next) {
     pool.getConnection(function (err, connection) {
         if (err) console.log(err);
         connection.query($sql.queryByBakery, req.query.bakeryId, function (err, result) {
-            debugger
             if (err) console.log(err);
             jsonWrite(res, result);
             connection.release();
